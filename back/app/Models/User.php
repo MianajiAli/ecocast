@@ -20,8 +20,8 @@ class User extends Authenticatable
         'name',
         'phone',
         'password',
-        'confirm_code',
         'phone_verified_at',
+        'role', // Adding role to fillable
     ];
 
     /**
@@ -33,6 +33,7 @@ class User extends Authenticatable
         'confirm_code',
         'password',
         'remember_token',
+        'confirm_code',
     ];
 
     /**
@@ -44,4 +45,24 @@ class User extends Authenticatable
         'phone_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    /**
+     * Check if the user is an admin.
+     *
+     * @return bool
+     */
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
+    }
+
+    /**
+     * Check if the user is a regular user.
+     *
+     * @return bool
+     */
+    public function isUser(): bool
+    {
+        return $this->role === 'user';
+    }
 }
