@@ -46,6 +46,10 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+        public function isSuperAdmin(): bool
+    {
+        return $this->role === 'superadmin';
+    }
     /**
      * Check if the user is an admin.
      *
@@ -64,5 +68,19 @@ class User extends Authenticatable
     public function isUser(): bool
     {
         return $this->role === 'user';
+    }
+     public function isAuthor(): bool
+    {
+        return $this->role === 'author';
+    }
+
+    /**
+     * Define the relationship between user and posts.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function posts()
+    {
+        return $this->hasMany(Post::class, 'user_id');
     }
 }

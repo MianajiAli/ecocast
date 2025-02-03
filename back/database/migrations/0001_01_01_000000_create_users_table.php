@@ -19,7 +19,8 @@ return new class extends Migration
             $table->timestamp('phone_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
-            $table->enum('role', ['user', 'admin'])->default('user'); // Adding the role column
+            // Updated role enum to include 'author' and 'superadmin'
+            $table->enum('role', ['user', 'admin', 'author', 'superadmin'])->default('user');
             $table->timestamps();
         });
 

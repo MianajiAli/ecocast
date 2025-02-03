@@ -15,38 +15,40 @@ class AuthController extends Controller
     /**
      * Register a new user
      */
-    public function register(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            'phone' => 'required|string|unique:users,phone',
-            'password' => 'required|string|min:6',
-        ]);
+public function register(Request $request)
+{
+    $validator = Validator::make($request->all(), [
+        'name' => 'required|string|max:255',
+        'phone' => 'required|string|unique:users,phone',
+        'password' => 'required|string|min:6',
+    ]);
 
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
-        }
-
-        $user = User::create([
-            'name' => $request->name,
-            'phone' => $request->phone,
-            'password' => bcrypt($request->password),
-        ]);
-
-        // Generate access & refresh tokens
-        $tokenResult = $user->createToken('Personal Access Token');
-        $accessToken = $tokenResult->accessToken;
-        $refreshToken = $tokenResult->token->id; // Token ID can be used as refresh token
-
-        return response()->json([
-            'message' => 'User registered successfully',
-            'user' => $user,
-            'access_token' => $accessToken,
-            'refresh_token' => $refreshToken,
-            'token_type' => 'Bearer',
-            'expires_at' => $tokenResult->token->expires_at
-        ], 201);
+    if ($validator->fails()) {
+        return response()->json($validator->errors(), 422);
     }
+
+    $user = User::create([
+        'name' => $request->name,
+        'phone' => $request->phone,
+        'password' => bcrypt($request->password),
+    ]);
+
+    // Generate access token
+    $tokenResult = $user->createToken('Personal Access Token');
+    $accessToken = $tokenResult->accessToken;
+
+    // Create a refresh token (Passport creates it when the access token is issued)
+    $refreshToken = $tokenResult->token->id; // The token's ID is used for the refresh token
+
+    return response()->json([
+        'message' => 'User registered successfully',
+        'user' => $user,
+        'access_token' => $accessToken,
+        'refresh_token' => $refreshToken,
+        'token_type' => 'Bearer',
+        'expires_at' => $tokenResult->token->expires_at
+    ], 201);
+}
 
     /**
      * Login user and create access & refresh tokens
