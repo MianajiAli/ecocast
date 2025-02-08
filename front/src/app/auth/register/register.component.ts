@@ -22,19 +22,23 @@ export class RegisterComponent {
 
   // This method handles the registration process
   onRegister() {
-
-
     // Call the register method from AuthService
     this.authService.register(this.formData.name, this.formData.phone, this.formData.password)
       .subscribe(
         response => {
-          // Navigate to a different page on successful registration (e.g., dashboard)
-          this.router.navigate(['/dashboard']);
+          // Check the response
+          console.log('Registration successful', response);
+
+          // Navigate to the dashboard after a successful registration
+
+          this.router.navigate(['/']);
+
         },
         error => {
           console.error('Registration error', error);
-          // You can handle error responses here if necessary
+          // Handle error if necessary
         }
       );
   }
+
 }
