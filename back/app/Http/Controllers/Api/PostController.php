@@ -14,8 +14,14 @@ class PostController extends Controller
     {
         $posts = Post::all();
 
-        return response()->json($posts,200);
+        return response()->json($posts, 200);
     }
+
+    public function show(Post $post)
+    {
+        return response()->json($post);
+    }
+
 
     public function store(Request $request)
     {
@@ -33,11 +39,6 @@ class PostController extends Controller
         $post->save();
 
         return response()->json($post, 201);
-    }
-
-    public function show(Post $post)
-    {
-        return response()->json($post);
     }
 
     public function update(Request $request, Post $post)
