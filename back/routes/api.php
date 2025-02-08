@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\PostController;
@@ -10,6 +9,13 @@ use App\Http\Controllers\Api\CommentController;
 use App\Http\Controllers\Api\LikeController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\SettingController;
+
+// Public Routes
+Route::apiResource('categories', CategoryController::class)->only(['index', 'show']);
+Route::apiResource('tags', TagController::class)->only(['index', 'show']);
+Route::apiResource('posts', PostController::class)->only(['index', 'show']);
+Route::apiResource('posts.comments', CommentController::class)->only(['index']);
+Route::get('/settings/{key}', [SettingController::class, 'show']); // Public access to settings for specific keys
 
 // Authentication Routes
 Route::prefix('auth')->group(function () {
@@ -23,6 +29,7 @@ Route::prefix('auth')->group(function () {
     });
 });
 
+// Authenticated Routes (Requires API Token)
 Route::middleware(['auth:api'])->group(function () {
     // Role-based Middleware for Admins
     Route::middleware(['role:admin'])->group(function () {
@@ -40,7 +47,6 @@ Route::middleware(['auth:api'])->group(function () {
         Route::apiResource('categories', CategoryController::class)->only(['index', 'show']);
         Route::apiResource('tags', TagController::class)->only(['index', 'show']);
         Route::get('/settings', [SettingController::class, 'index']);
-        Route::get('/settings/{key}', [SettingController::class, 'show']);
         Route::post('/settings', [SettingController::class, 'store']);
         Route::put('/settings/{key}', [SettingController::class, 'update']);
     });
@@ -52,8 +58,8 @@ Route::middleware(['auth:api'])->group(function () {
         Route::delete('/posts/{post}', [PostController::class, 'destroy']);
     });
 
-    // Comment Routes
-    Route::apiResource('posts.comments', CommentController::class)->only(['index', 'store', 'destroy']);
+    // Comment Routes (Authenticated users can post, delete comments)
+    Route::apiResource('posts.comments', CommentController::class)->only(['store', 'destroy']);
 
     // Like Routes
     Route::post('/posts/{post}/like', [LikeController::class, 'like']);
