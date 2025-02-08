@@ -9,7 +9,7 @@ use App\Http\Controllers\Api\TagController;
 use App\Http\Controllers\Api\CommentController;
 use App\Http\Controllers\Api\LikeController;
 use App\Http\Controllers\Api\UserController; // Assuming there's a UserController for managing users
-
+use App\Http\Controllers\Api\SettingController;
 // Authentication Routes
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
@@ -31,22 +31,22 @@ Route::middleware(['auth:api'])->group(function () {
         Route::delete('/posts/{post}', [PostController::class, 'destroy']);
     });
 
-// Role-based Middleware for Super Admins
-Route::middleware(['role:super_admin'])->group(function () {
-    // Super Admin routes for user management
-    Route::apiResource('users', UserController::class); // Full user management
-    Route::put('/users/{user}/assign-role', [UserController::class, 'assignRole']); // Example for role assignment
+    // Role-based Middleware for Super Admins
+    Route::middleware(['role:super_admin'])->group(function () {
+        // Super Admin routes for user management
+        Route::apiResource('users', UserController::class); // Full user management
+        Route::put('/users/{user}/assign-role', [UserController::class, 'assignRole']); // Example for role assignment
 
-    // Super Admin can also manage categories and tags
-    Route::apiResource('categories', CategoryController::class)->only(['index', 'show']);
-    Route::apiResource('tags', TagController::class)->only(['index', 'show']);
+        // Super Admin can also manage categories and tags
+        Route::apiResource('categories', CategoryController::class)->only(['index', 'show']);
+        Route::apiResource('tags', TagController::class)->only(['index', 'show']);
 
-    // Super Admin-only route for managing site-wide settings
-    Route::get('/settings', [SettingController::class, 'index']); // Get all settings
-    Route::get('/settings/{key}', [SettingController::class, 'show']); // Get specific setting by key
-    Route::post('/settings', [SettingController::class, 'store']); // Create a new setting
-    Route::put('/settings/{key}', [SettingController::class, 'update']); // Update a specific setting
-});
+        // Super Admin-only route for managing site-wide settings
+        Route::get('/settings', [SettingController::class, 'index']); // Get all settings
+        Route::get('/settings/{key}', [SettingController::class, 'show']); // Get specific setting by key
+        Route::post('/settings', [SettingController::class, 'store']); // Create a new setting
+        Route::put('/settings/{key}', [SettingController::class, 'update']); // Update a specific setting
+    });
 
 
     // Role-based Middleware for Admins and Authors
