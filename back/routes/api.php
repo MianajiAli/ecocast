@@ -9,7 +9,12 @@ use App\Http\Controllers\Api\CommentController;
 use App\Http\Controllers\Api\LikeController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\SettingController;
+use App\Http\Controllers\Admin\RoleController; // Add this import
+use App\Http\Controllers\Admin\PermissionController; // Add this import
 
+
+Route::post('/create-roles', [RoleController::class, 'createRoles']); // Create roles route
+Route::post('/assign-role-to-user', [RoleController::class, 'assignRoleToUser']); // Assign role to user route
 // Public Routes
 Route::apiResource('categories', CategoryController::class)->only(['index', 'show']);
 Route::apiResource('tags', TagController::class)->only(['index', 'show']);
@@ -42,7 +47,7 @@ Route::middleware(['auth:api'])->group(function () {
     });
 
     // Role-based Middleware for Super Admins
-    Route::middleware(['role:super_admin'])->group(function () {
+    Route::middleware(['role:manager'])->group(function () {
         Route::apiResource('users', UserController::class);
         Route::put('/users/{user}/assign-role', [UserController::class, 'assignRole']);
         Route::apiResource('categories', CategoryController::class)->only(['index', 'show']);
@@ -50,6 +55,13 @@ Route::middleware(['auth:api'])->group(function () {
         Route::get('/settings', [SettingController::class, 'index']);
         Route::post('/settings', [SettingController::class, 'store']);
         Route::put('/settings/{key}', [SettingController::class, 'update']);
+
+        // Role and Permission Management Routes
+        Route::apiResource('roles', RoleController::class); // Role routes
+
+        // Route::apiResource('permissions', PermissionController::class); // Permission routes
+        Route::post('/roles/{role}/permissions', [RoleController::class, 'assignPermission']); // Assign permission to role
+        Route::delete('/roles/{role}/permissions', [RoleController::class, 'revokePermission']); // Revoke permission from role
     });
 
     // Role-based Middleware for Admins and Authors

@@ -6,10 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable, HasApiTokens;
+    use HasFactory, Notifiable, HasApiTokens, HasRoles;  // Use HasRoles trait here
 
     /**
      * The attributes that are mass assignable.
@@ -21,7 +22,6 @@ class User extends Authenticatable
         'phone',
         'password',
         'phone_verified_at',
-        'role', // Adding role to fillable
     ];
 
     /**
@@ -33,7 +33,6 @@ class User extends Authenticatable
         'confirm_code',
         'password',
         'remember_token',
-        'confirm_code',
     ];
 
     /**
@@ -46,32 +45,25 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-        public function isSuperAdmin(): bool
-    {
-        return $this->role === 'superadmin';
-    }
-    /**
-     * Check if the user is an admin.
-     *
-     * @return bool
-     */
+
     public function isAdmin(): bool
     {
-        return $this->role === 'admin';
+        return $this->hasRole('admin');
     }
 
-    /**
-     * Check if the user is a regular user.
-     *
-     * @return bool
-     */
+    public function isManager(): bool
+    {
+        return $this->hasRole('manager');
+    }
+
     public function isUser(): bool
     {
-        return $this->role === 'user';
+        return $this->hasRole('user');
     }
-     public function isAuthor(): bool
+
+    public function isAuthor(): bool
     {
-        return $this->role === 'author';
+        return $this->hasRole('author');
     }
 
     /**
