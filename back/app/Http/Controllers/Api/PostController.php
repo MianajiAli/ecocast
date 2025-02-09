@@ -24,7 +24,7 @@ class PostController extends Controller
     {
         $request->validate([
             'title' => 'required|string|max:255',
-            'slug' => 'required|string|unique:posts,slug', // ✅ Added slug validation
+            'slug' => 'required|string|unique:posts,slug',
             'content' => 'required|string',
             'category_id' => 'required|exists:categories,id',
         ]);
@@ -37,7 +37,7 @@ class PostController extends Controller
         $post = new Post();
         $post->fill([
             'title' => $request->title,
-            'slug' => $request->slug, // ✅ Added slug
+            'slug' => $request->slug,
             'content' => $request->content,
             'category_id' => $request->category_id,
             'user_id' => $user->id,
@@ -53,11 +53,11 @@ class PostController extends Controller
 
         $request->validate([
             'title' => 'required|string|max:255',
-            'slug' => 'required|string|unique:posts,slug,' . $post->id, // ✅ Slug must be unique except for the current post
+            'slug' => 'required|string|unique:posts,slug,' . $post->id,
             'content' => 'required|string',
         ]);
 
-        $post->update($request->only(['title', 'slug', 'content'])); // ✅ Updated slug & content
+        $post->update($request->only(['title', 'slug', 'content']));
 
         return response()->json($post);
     }

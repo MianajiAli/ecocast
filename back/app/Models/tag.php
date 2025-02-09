@@ -9,6 +9,9 @@ class Tag extends Model
 {
     use HasFactory;
 
+    // Add 'name' to the $fillable property for mass assignment
+    protected $fillable = ['name', 'slug'];
+
     // Relationship with the Post model (Many-to-Many)
     public function posts()
     {

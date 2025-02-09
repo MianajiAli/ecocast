@@ -32,9 +32,9 @@ class RoleController extends Controller
         }
 
         // Assign 'admin' role (or modify as needed)
-        $user->assignRole('author');
         $user->assignRole('super_admin');
         $user->assignRole('admin');
+        $user->assignRole('author');
 
 
         return response()->json([
@@ -43,7 +43,7 @@ class RoleController extends Controller
             'isManager' => $user->hasRole('manager'),
             'isAdmin' => $user->hasRole('manager'),
             'isManager' => $user->hasRole('manager'),
-            'isManager' => $user->hasRole('manager'),
+            'isAuthor' => $user->hasRole('author'),
 
         ], 200);
     }

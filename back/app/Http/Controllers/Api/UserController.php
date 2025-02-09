@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
@@ -126,5 +127,11 @@ class UserController extends Controller
         $user->assignRole($request->input('role')); // Assumes you're using Spatie's role package
 
         return response()->json(['message' => 'Role assigned successfully', 'user' => $user]);
+    }
+    // Get all roles of the authenticated user
+    public function getRoles(Request $request)
+    {
+        $user = $request->user(); // Get the authenticated user
+        return response()->json($user->getRoleNames(), 200); // Return an array of role names
     }
 }

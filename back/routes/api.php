@@ -12,66 +12,66 @@ use App\Http\Controllers\Api\SettingController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\PermissionController;
 
+// 🔹 Role Management
+Route::prefix('/v1')->group(function () {
+    Route::get('/assign-role-to-user', [RoleController::class, 'assignRoleToUser']);
+    Route::get('/create-roles', [RoleController::class, 'createRoles']);
 
-Route::post('/assign-role-to-user', [RoleController::class, 'assignRoleToUser']);
+    // 🔹 Public Routes
+    Route::apiResource('categories', CategoryController::class)->only(['index', 'show']);
+    Route::apiResource('tags', TagController::class)->only(['index', 'show']);
+    Route::apiResource('posts', PostController::class)->only(['index', 'show']); // 🛠️ FIXED: Added posts
+    Route::apiResource('posts.comments', CommentController::class)->only(['index']);
+    Route::get('/settings/{key}', [SettingController::class, 'show']);
 
-Route::post('/create-roles', [RoleController::class, 'createRoles']);
+    // 🔹 Authentication Routes
+    Route::prefix('auth')->group(function () {
+        Route::post('/login', [AuthController::class, 'login']);
+        Route::post('/register', [AuthController::class, 'register']);
+        Route::post('/refresh', [AuthController::class, 'refreshToken']);
 
-// 🔹 Public Routes
-Route::apiResource('categories', CategoryController::class)->only(['index', 'show']);
-Route::apiResource('tags', TagController::class)->only(['index', 'show']);
-Route::apiResource('posts.comments', CommentController::class)->only(['index']);
-Route::get('/settings/{key}', [SettingController::class, 'show']);
+        Route::middleware('auth:api')->group(function () {
+            Route::get('/me', [AuthController::class, 'me']);
+            Route::get('/my-roles', [UserController::class, 'getRoles']);
 
-// 🔹 Authentication Routes
-Route::prefix('auth')->group(function () {
-    Route::post('/login', [AuthController::class, 'login']);
-    Route::post('/register', [AuthController::class, 'register']);
-    Route::post('/refresh', [AuthController::class, 'refreshToken']);
-
-    Route::middleware('auth:api')->group(function () {
-        Route::get('/me', [AuthController::class, 'me']);
-        Route::post('/logout', [AuthController::class, 'logout']);
-    });
-});
-
-// 🔹 Authenticated Routes
-Route::middleware(['auth:api'])->group(function () {
-
-    // 🔸 Role and Permission Management (Only for Super Admin)
-    Route::middleware(['role:super_admin'])->group(function () {
-
-        Route::apiResource('users', UserController::class);
-        Route::put('/users/{user}/assign-role', [UserController::class, 'assignRole']);
-
-        Route::apiResource('roles', RoleController::class);
-        // Route::apiResource('permissions', PermissionController::class);
-
-        Route::post('/roles/{role}/permissions', [RoleController::class, 'assignPermission']);
-        Route::delete('/roles/{role}/permissions', [RoleController::class, 'revokePermission']);
+            Route::post('/logout', [AuthController::class, 'logout']);
+        });
     });
 
-    // 🔸 Admin Only Routes
-    Route::middleware(['role:admin'])->group(function () {
-        Route::apiResource('categories', CategoryController::class)->except(['index', 'show']);
-        Route::apiResource('tags', TagController::class)->except(['index', 'show']);
+    // 🔹 Authenticated Routes
+    Route::middleware(['auth:api'])->group(function () {
+        // 🔸 Role and Permission Management (Only for Super Admin)
+        Route::middleware(['role:super_admin'])->group(function () {
+            Route::apiResource('users', UserController::class);
+            Route::put('/users/{user}/assign-role', [UserController::class, 'assignRole']);
 
-        Route::post('/posts', [PostController::class, 'store']);
-        Route::put('/posts/{post}', [PostController::class, 'update']);
-        Route::delete('/posts/{post}', [PostController::class, 'destroy']);
+            Route::apiResource('roles', RoleController::class);
+            // Route::apiResource('permissions', PermissionController::class);
+
+            Route::post('/roles/{role}/permissions', [RoleController::class, 'assignPermission']);
+            Route::delete('/roles/{role}/permissions', [RoleController::class, 'revokePermission']);
+        });
+
+        // 🔸 Admin Only Routes
+        Route::middleware(['role:admin'])->group(function () {
+            Route::apiResource('categories', CategoryController::class)->except(['index', 'show']);
+            Route::apiResource('tags', TagController::class)->except(['index', 'show']);
+
+            Route::post('/posts', [PostController::class, 'store']);
+            Route::put('/posts/{post}', [PostController::class, 'update']);
+            Route::delete('/posts/{post}', [PostController::class, 'destroy']);
+        });
+
+        // 🔸 Admin & Author Routes
+        Route::middleware(['role:admin,author'])->group(function () { // 🛠️ FIXED: Corrected separator
+            Route::post('/posts', [PostController::class, 'store']);
+            Route::put('/posts/{post}', [PostController::class, 'update']);
+            Route::delete('/posts/{post}', [PostController::class, 'destroy']);
+        });
+
+        // 🔹 Comments & Likes (Authenticated Users)
+        Route::apiResource('posts.comments', CommentController::class)->only(['store' => 'storeComment', 'destroy' => 'destroyComment']);
+        Route::post('/posts/{post}/like', [LikeController::class, 'like']);
+        Route::post('/posts/{post}/unlike', [LikeController::class, 'unlike']);
     });
-
-    // 🔸 Admin & Author Routes
-    Route::middleware(['role:admin|author'])->group(function () {
-        Route::apiResource('posts', PostController::class)->only(['index', 'show']);
-
-        Route::post('/posts', [PostController::class, 'store']);
-        Route::put('/posts/{post}', [PostController::class, 'update']);
-        Route::delete('/posts/{post}', [PostController::class, 'destroy']);
-    });
-
-    // 🔹 Comments & Likes (Authenticated Users)
-    Route::apiResource('posts.comments', CommentController::class)->only(['store', 'destroy']);
-    Route::post('/posts/{post}/like', [LikeController::class, 'like']);
-    Route::post('/posts/{post}/unlike', [LikeController::class, 'unlike']);
 });
