@@ -6,14 +6,12 @@ use App\Models\Post;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Gate;
 
 class PostController extends Controller
 {
     public function index()
     {
         $posts = Post::all();
-
         return response()->json($posts, 200);
     }
 
@@ -22,20 +20,28 @@ class PostController extends Controller
         return response()->json($post);
     }
 
-
     public function store(Request $request)
     {
         $request->validate([
             'title' => 'required|string|max:255',
-            'body' => 'required|string',
+            'slug' => 'required|string|unique:posts,slug', // ✅ Added slug validation
+            'content' => 'required|string',
             'category_id' => 'required|exists:categories,id',
         ]);
 
+        $user = Auth::user();
+        if (!$user || !$user->hasRole('author')) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+
         $post = new Post();
-        $post->title = $request->title;
-        $post->body = $request->body;
-        $post->category_id = $request->category_id;
-        $post->user_id = Auth::id(); // Set the author as the currently authenticated user
+        $post->fill([
+            'title' => $request->title,
+            'slug' => $request->slug, // ✅ Added slug
+            'content' => $request->content,
+            'category_id' => $request->category_id,
+            'user_id' => $user->id,
+        ]);
         $post->save();
 
         return response()->json($post, 201);
@@ -47,10 +53,11 @@ class PostController extends Controller
 
         $request->validate([
             'title' => 'required|string|max:255',
-            'body' => 'required|string',
+            'slug' => 'required|string|unique:posts,slug,' . $post->id, // ✅ Slug must be unique except for the current post
+            'content' => 'required|string',
         ]);
 
-        $post->update($request->only(['title', 'body']));
+        $post->update($request->only(['title', 'slug', 'content'])); // ✅ Updated slug & content
 
         return response()->json($post);
     }

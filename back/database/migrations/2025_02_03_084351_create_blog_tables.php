@@ -7,20 +7,7 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up(): void
     {
-        // Posts Table
-        Schema::create('posts', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->string('title');
-            $table->string('slug')->unique();
-            $table->longText('content');
-            $table->string('image')->nullable();
-            $table->enum('status', ['draft', 'published'])->default('draft');
-            $table->timestamp('published_at')->nullable();
-            $table->timestamps();
-        });
-
-        // Categories Table
+        // Categories Table (Should be created first)
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
             $table->string('name')->unique();
@@ -28,11 +15,18 @@ return new class extends Migration {
             $table->timestamps();
         });
 
-        // Post-Category Pivot Table
-        Schema::create('post_category', function (Blueprint $table) {
-            $table->foreignId('post_id')->constrained()->onDelete('cascade');
-            $table->foreignId('category_id')->constrained()->onDelete('cascade');
-            $table->primary(['post_id', 'category_id']);
+        // Posts Table
+        Schema::create('posts', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('category_id')->constrained()->onDelete('cascade'); // Direct relationship
+            $table->string('title');
+            $table->string('slug')->unique();
+            $table->longText('content');
+            $table->string('image')->nullable();
+            $table->enum('status', ['draft', 'published'])->default('draft');
+            $table->timestamp('published_at')->nullable();
+            $table->timestamps();
         });
 
         // Tags Table
@@ -43,7 +37,7 @@ return new class extends Migration {
             $table->timestamps();
         });
 
-        // Post-Tag Pivot Table
+        // Post-Tag Pivot Table (Many-to-Many)
         Schema::create('post_tag', function (Blueprint $table) {
             $table->foreignId('post_id')->constrained()->onDelete('cascade');
             $table->foreignId('tag_id')->constrained()->onDelete('cascade');
@@ -86,8 +80,7 @@ return new class extends Migration {
         Schema::dropIfExists('comments');
         Schema::dropIfExists('post_tag');
         Schema::dropIfExists('tags');
-        Schema::dropIfExists('post_category');
-        Schema::dropIfExists('categories');
         Schema::dropIfExists('posts');
+        Schema::dropIfExists('categories'); // Dropping categories last
     }
 };

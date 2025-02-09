@@ -9,6 +9,9 @@ class Category extends Model
 {
     use HasFactory;
 
+    // Define fillable fields to allow mass assignment
+    protected $fillable = ['name', 'slug', 'description'];
+
     // Relationship with the Post model (One-to-Many)
     public function posts()
     {

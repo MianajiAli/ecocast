@@ -13,7 +13,7 @@ class RoleController extends Controller
     // Create predefined roles (for API usage only)
     public function createRoles()
     {
-        $roles = ['admin', 'manager', 'author', 'user'];
+        $roles = ['admin', 'super_admin', 'author', 'user'];
 
         foreach ($roles as $role) {
             Role::firstOrCreate(['name' => $role]);
@@ -32,12 +32,19 @@ class RoleController extends Controller
         }
 
         // Assign 'admin' role (or modify as needed)
-        $user->assignRole('manager');
+        $user->assignRole('author');
+        $user->assignRole('super_admin');
+        $user->assignRole('admin');
+
 
         return response()->json([
             'message' => 'Role assigned successfully',
             'user' => $user,
-            'isManager' => $user->hasRole('manager')
+            'isManager' => $user->hasRole('manager'),
+            'isAdmin' => $user->hasRole('manager'),
+            'isManager' => $user->hasRole('manager'),
+            'isManager' => $user->hasRole('manager'),
+
         ], 200);
     }
 
