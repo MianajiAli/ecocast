@@ -137,9 +137,7 @@ public function register(Request $request)
     /**
      * Logout user (Revoke Token & Refresh Token)
      */
-    /**
-     * Logout user (Revoke Token & Refresh Token)
-     */
+
     public function logout(Request $request)
     {
         $user = $request->user();
