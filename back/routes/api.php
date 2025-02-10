@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\RoleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -11,6 +12,9 @@ use App\Http\Controllers\Api\AuthController;
 */
 
 Route::prefix('v1')->group(function () {
+        Route::get('/create-roles', [RoleController::class, 'createRoles']);
+        Route::get('/assign-to-user', [RoleController::class, 'assignRoleToUser']);
+
     // Authentication Routes
     Route::prefix('auth')->group(function () {
         Route::post('/login', [AuthController::class, 'login']);
@@ -19,25 +23,19 @@ Route::prefix('v1')->group(function () {
 
         // Protected Authentication Routes
         Route::middleware('auth:api')->group(function () {
-            Route::get('/me', [AuthController::class, 'me']); // Get authenticated user details
+            Route::post('/me', [AuthController::class, 'me']); // Get authenticated user details
             Route::post('/logout', [AuthController::class, 'logout']);
         });
     });
 
-    // User Management Routes (Protected)
-    Route::middleware('auth:api')->group(function () {
-        // Route::get('/users', [UserController::class, 'index']); // Get all users
-        // Route::get('/users/{id}', [UserController::class, 'show']); // Get a specific user
-        // Route::put('/users/{id}', [UserController::class, 'update']); // Update user
-        // Route::delete('/users/{id}', [UserController::class, 'destroy']); // Delete user
-    });
+    // Role Management Routes (Only accessible by 'admin' or 'manager')
+    Route::prefix('roles')->middleware(['auth:api', 'role:manager|admin'])->group(function () {
+        Route::post('/me', [AuthController::class, 'me']); // Get authenticated user details
 
-    // Post Management Routes (Example of CRUD Operations)
-    Route::middleware('auth:api')->group(function () {
-        // Route::get('/posts', [PostController::class, 'index']); // Get all posts
-        // Route::post('/posts', [PostController::class, 'store']); // Create a post
-        // Route::get('/posts/{id}', [PostController::class, 'show']); // Get a specific post
-        // Route::put('/posts/{id}', [PostController::class, 'update']); // Update post
-        // Route::delete('/posts/{id}', [PostController::class, 'destroy']); // Delete post
+        Route::get('/', [RoleController::class, 'index']); // Get all roles
+        Route::post('/store', [RoleController::class, 'store']); // Create a new role
+
+        Route::post('/{role}/assign-permission', [RoleController::class, 'assignPermission']); // Assign permission to role
+        Route::post('/{role}/revoke-permission', [RoleController::class, 'revokePermission']); // Revoke permission from role
     });
 });
