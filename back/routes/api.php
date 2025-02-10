@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\RoleController;
+use App\Http\Controllers\Api\PostController;
 
 /*
 |--------------------------------------------------------------------------
@@ -12,8 +13,9 @@ use App\Http\Controllers\Api\RoleController;
 */
 
 Route::prefix('v1')->group(function () {
-        Route::get('/create-roles', [RoleController::class, 'createRoles']);
-        Route::get('/assign-to-user', [RoleController::class, 'assignRoleToUser']);
+    // Role Management Routes
+    Route::get('/create-roles', [RoleController::class, 'createRoles']);
+    Route::get('/assign-to-user', [RoleController::class, 'assignRoleToUser']);
 
     // Authentication Routes
     Route::prefix('auth')->group(function () {
@@ -37,5 +39,17 @@ Route::prefix('v1')->group(function () {
 
         Route::post('/{role}/assign-permission', [RoleController::class, 'assignPermission']); // Assign permission to role
         Route::post('/{role}/revoke-permission', [RoleController::class, 'revokePermission']); // Revoke permission from role
+    });
+
+    // Blog Post Routes
+    Route::prefix('posts')->group(function () {
+        Route::get('/', [PostController::class, 'index']);
+        Route::get('/{slug}', [PostController::class, 'show']);
+        Route::middleware(['auth:api','role:manager'])->group(function () {
+
+            Route::post('/', [PostController::class, 'store']);
+            Route::put('/{slug}', [PostController::class, 'update']);
+            Route::delete('/{slug}', [PostController::class, 'destroy']);
+        });
     });
 });
