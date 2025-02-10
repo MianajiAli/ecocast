@@ -19,7 +19,7 @@ export class BlogPostComponent implements OnInit {
     this.slug = this.route.snapshot.paramMap.get('slug');
 
     if (this.slug) {
-      this.blogService.getBlog(this.slug).subscribe(
+      this.blogService.getPost(this.slug).subscribe(
         (response) => {
           console.log('Fetched blog post successfully', response);
           this.blog = response.data;

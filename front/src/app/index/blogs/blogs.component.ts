@@ -11,7 +11,7 @@ import { BlogService } from '../../services/blog.service';
 export class BlogsComponent {
   constructor(private blogService: BlogService) { }
   ngOnInit(): void {
-    this.blogService.blogs().subscribe(
+    this.blogService.getPosts().subscribe(
       (response) => {
         console.log('Logged in successfully', response);
         this.blogs = response.data

@@ -25,12 +25,15 @@ class PostController extends Controller
             ->with(['user:id,name'])
             ->firstOrFail();
 
+        // Increment the view count
+        $post->increment('views');
+
+        // Return the response with the updated post data
         return response()->json([
             'success' => true,
             'data' => $post
         ], 200);
     }
-
 
 
     public function store(Request $request)
@@ -41,18 +44,15 @@ class PostController extends Controller
             'content' => 'required|string',
             'meta_title' => 'nullable|string|max:255',
             'meta_description' => 'nullable|string|max:255',
-            'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Image validation
-            'status' => ['nullable', Rule::in(['draft', 'published', 'archived'])], // Status validation
+            'thumbnail' => 'nullable|string|max:255',
+            'status' => ['nullable', Rule::in(['draft', 'published', 'archived'])],
             'category' => 'nullable|string|max:100',
-            'tags' => 'nullable|array', // Ensure tags are an array
+            // Removed 'tags' field
         ]);
 
         // Add user_id to the validated data
         $validatedData['user_id'] = auth()->id();
 
-        if ($request->hasFile('thumbnail')) {
-            $validatedData['thumbnail'] = $request->file('thumbnail')->store('thumbnails', 'public');
-        }
 
         $post = Post::create($validatedData);
 
@@ -61,41 +61,6 @@ class PostController extends Controller
             'message' => 'Post created successfully',
             'data' => $post
         ], 201);
-    }
-
-    public function update(Request $request, $slug)
-    {
-        $post = Post::where('slug', $slug)->firstOrFail();
-
-        $validatedData = $request->validate([
-            'title' => 'sometimes|string|max:255',
-            'slug' => 'sometimes|string|unique:posts,slug,' . $post->id,
-            'content' => 'sometimes|string',
-            'meta_title' => 'nullable|string|max:255',
-            'meta_description' => 'nullable|string|max:255',
-            'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'status' => ['sometimes', Rule::in(['draft', 'published', 'archived'])],
-            'category' => 'nullable|string|max:100',
-            'tags' => 'nullable|array',
-        ]);
-
-        if ($request->hasFile('thumbnail')) {
-            if ($post->thumbnail) {
-                Storage::disk('public')->delete($post->thumbnail); // Delete old thumbnail
-            }
-            $validatedData['thumbnail'] = $request->file('thumbnail')->store('thumbnails', 'public');
-        }
-
-        // Don't change the user_id during an update
-        unset($validatedData['user_id']);
-
-        $post->update($validatedData);
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Post updated successfully',
-            'data' => $post
-        ], 200);
     }
 
 

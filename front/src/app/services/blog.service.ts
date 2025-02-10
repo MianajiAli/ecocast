@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
 @Injectable({
@@ -10,81 +10,81 @@ import { catchError, map } from 'rxjs/operators';
 export class BlogService {
 
   private apiUrl = environment.apiUrl + '/posts/';
+  private token = localStorage.getItem('authToken'); // Get the token from localStorage
 
   constructor(private http: HttpClient) { }
 
-  // Get all blog posts
-  blogs(): Observable<any> {
-    const headers = new HttpHeaders({
+  private getHeaders(): HttpHeaders {
+    return new HttpHeaders({
       'Accept': 'application/json',
-      'Content-1': 'application/json'
+      'Authorization': `Bearer ${this.token}`
     });
-    return this.http.get<any>(`${this.apiUrl}`, { headers }).pipe(
+  }
+
+  // Get all posts
+  getPosts(): Observable<any> {
+    return this.http.get<any>(this.apiUrl, { headers: this.getHeaders() }).pipe(
       map(response => response),
-      catchError(error => {
-        console.error('Blog error', error);
-        throw error;
-      })
+      catchError(error => throwError(() => new Error(error)))
     );
   }
 
-  // Get a single blog post by ID
-  getBlog(slug: string): Observable<any> {
-    const headers = new HttpHeaders({
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    });
-    return this.http.get<any>(`${this.apiUrl}${slug}`, { headers }).pipe(
+  // Get a single post by slug
+  getPost(slug: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}${slug}`, { headers: this.getHeaders() }).pipe(
       map(response => response),
-      catchError(error => {
-        console.error('Blog error', error);
-        throw error;
-      })
+      catchError(error => throwError(() => new Error(error)))
     );
   }
 
-  // Create a new blog post
-  createBlog(postData: any): Observable<any> {
-    const headers = new HttpHeaders({
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    });
-    return this.http.post<any>(`${this.apiUrl}`, postData, { headers }).pipe(
+  // Create a new post (Supports Image Upload)
+  createPost(jsonData: any, imageFile?: File): Observable<any> {
+
+
+    const data = {
+      title: jsonData.title,
+      slug: jsonData.slug,
+      content: jsonData.content,
+      meta_title: jsonData.meta_title || '',
+      meta_description: jsonData.meta_description || '',
+      status: jsonData.status || 'draft',
+      category: jsonData.category || '',
+      tags: JSON.stringify(jsonData.tags || []),
+      thumbnail: jsonData.thumbnail || '',
+    };
+
+    return this.http.post<any>(this.apiUrl, data, { headers: this.getHeaders() }).pipe(
       map(response => response),
-      catchError(error => {
-        console.error('Create blog error', error);
-        throw error;
-      })
+      catchError(error => throwError(() => new Error(error)))
     );
   }
 
-  // Update a blog post by ID
-  updateBlog(id: number, postData: any): Observable<any> {
-    const headers = new HttpHeaders({
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    });
-    return this.http.put<any>(`${this.apiUrl}${id}`, postData, { headers }).pipe(
+  // Update a post by slug (Supports Image Upload)// Update a post by slug (Send JSON with base64 image)
+  updatePost(slug: string, jsonData: any, imageFile?: File): Observable<any> {
+    const data = {
+      title: jsonData.title,
+      slug: jsonData.slug,
+      content: jsonData.content,
+      meta_title: jsonData.meta_title || '',
+      meta_description: jsonData.meta_description || '',
+      status: jsonData.status || 'draft',
+      category: jsonData.category || '',
+      tags: JSON.stringify(jsonData.tags || []),
+      thumbnail: jsonData.thumbnail || '', // Use base64 image if available, otherwise fallback to existing thumbnail
+    };
+
+    return this.http.post<any>(`${this.apiUrl}${slug}`, data, { headers: this.getHeaders() }).pipe(
       map(response => response),
-      catchError(error => {
-        console.error('Update blog error', error);
-        throw error;
-      })
+      catchError(error => throwError(() => new Error(error)))
     );
   }
 
-  // Delete a blog post by ID
-  deleteBlog(id: number): Observable<any> {
-    const headers = new HttpHeaders({
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    });
-    return this.http.delete<any>(`${this.apiUrl}${id}`, { headers }).pipe(
+
+  // Delete a post by slug
+  deletePost(slug: string): Observable<any> {
+    return this.http.delete<any>(`${this.apiUrl}${slug}`, { headers: this.getHeaders() }).pipe(
       map(response => response),
-      catchError(error => {
-        console.error('Delete blog error', error);
-        throw error;
-      })
+      catchError(error => throwError(() => new Error(error)))
     );
   }
 }
