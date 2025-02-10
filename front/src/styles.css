@@ -1,2 +1,28 @@
 /* You can add global styles to this file, and also import other style files */
 @import "tailwindcss";
+
+/* Unified Font Family */
+@font-face {
+    font-family: 'UnifiedFont';
+    src: url('./app/assets/fonts/Kahroba-VF[wght,wdth,CNTR].woff2') format('woff2');
+    font-weight: 100 900;
+    font-stretch: 25% 100%;
+    font-style: normal;
+    unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+    /* Persian & Arabic */
+}
+
+@font-face {
+    font-family: 'UnifiedFont';
+    src: url('./app/assets/fonts/Inconsolata-VariableFont_wdth,wght.ttf') format('woff2');
+    font-weight: 100 900;
+    font-stretch: 25% 100%;
+    font-style: normal;
+    unicode-range: U+0020-007F, U+00A0-00FF;
+    /* English & Latin */
+}
+
+/* Apply the unified font */
+body {
+    font-family: 'UnifiedFont', sans-serif;
+}
