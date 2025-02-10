@@ -3,14 +3,44 @@
         <a routerLink="/blog" class="inline-block mt-6 text-blue-600 hover:underline">
             ← Back to Blog
         </a>
-        <h1 class="text-3xl font-bold text-gray-900 mb-4">{{ blog.title }}</h1>
-        <p class="text-gray-500 text-sm mb-6">Published on {{ blog.created_at | date: 'longDate' }}</p>
 
+        <!-- Blog Thumbnail (Fallback Image) -->
+        <div *ngIf="blog.thumbnail; else defaultThumbnail" class="my-6">
+            <img [src]="'/storage/' + blog.thumbnail" alt="Thumbnail" class="w-full h-auto rounded-lg shadow-md">
+        </div>
+        <ng-template #defaultThumbnail>
+            <!-- <img src="/path/to/default-image.jpg" alt="Default Thumbnail" class="w-full h-auto rounded-lg shadow-md"> -->
+        </ng-template>
+
+        <h1 class="text-4xl font-extrabold text-gray-900 mb-4">{{ blog.title }}</h1>
+
+        <!-- Author and Date Info -->
+        <div class="flex items-center text-gray-500 text-sm mb-6">
+            <span>By <span class="font-semibold text-gray-700">{{ blog.user.name }}</span></span>
+            <span class="mx-2">|</span>
+            <span>Published on {{ blog.created_at | date: 'longDate' }}</span>
+        </div>
+
+        <!-- Blog Content -->
         <p class="text-gray-700 leading-relaxed whitespace-pre-line">{{ blog.content }}</p>
 
+        <!-- Blog Tags (Optional) -->
+        <div *ngIf="blog.tags?.length" class="mt-6">
+            <h3 class="font-semibold text-lg text-gray-800 mb-2">Tags:</h3>
+            <div class="flex flex-wrap gap-2">
+                <span *ngFor="let tag of blog.tags" class="bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-sm">
+                    {{ tag }}
+                </span>
+            </div>
+        </div>
 
+        <!-- Blog Category (Optional) -->
+        <div *ngIf="blog.category" class="mt-4 text-gray-500">
+            <span class="font-semibold">Category:</span> {{ blog.category }}
+        </div>
     </div>
 
+    <!-- Loading state -->
     <ng-template #loading>
         <div class="text-center text-gray-500">Loading blog post...</div>
     </ng-template>
