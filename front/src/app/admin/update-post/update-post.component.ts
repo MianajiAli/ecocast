@@ -95,6 +95,7 @@ export class UpdatePostComponent implements OnInit {
       next: (response) => {
         console.log('Post updated successfully:', response);
         this.router.navigate(['/posts']);  // Redirect after successful update
+
       },
       error: (error) => {
         console.error('Error updating post:', error);

@@ -31,7 +31,7 @@ Route::prefix('v1')->group(function () {
     });
 
     // Role Management Routes (Only accessible by 'admin' or 'manager')
-    Route::prefix('roles')->middleware(['auth:api', 'role:manager|admin'])->group(function () {
+    Route::prefix('roles')->middleware(['auth:api', 'role:manager'])->group(function () {
         Route::post('/me', [AuthController::class, 'me']); // Get authenticated user details
 
         Route::get('/', [RoleController::class, 'index']); // Get all roles
@@ -45,10 +45,10 @@ Route::prefix('v1')->group(function () {
     Route::prefix('posts')->group(function () {
         Route::get('/', [PostController::class, 'index']);
         Route::get('/{slug}', [PostController::class, 'show']);
-        Route::middleware(['auth:api','role:manager'])->group(function () {
+        Route::patch('/{slug}', [PostController::class, 'update']);
+        Route::middleware(['auth:api', 'role:manager'])->group(function () {
 
             Route::post('/', [PostController::class, 'store']);
-            Route::put('/{slug}', [PostController::class, 'update']);
             Route::delete('/{slug}', [PostController::class, 'destroy']);
         });
     });

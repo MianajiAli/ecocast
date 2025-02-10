@@ -62,6 +62,37 @@ class PostController extends Controller
             'data' => $post
         ], 201);
     }
+    public function update(Request $request, $slug)
+    {
+        // Validate the incoming data
+        $validatedData = $request->validate([
+            'title' => 'required|string|max:255',
+            'slug' => ['required', 'string', Rule::unique('posts', 'slug')->ignore($slug, 'slug')],
+            'content' => 'required|string',
+            'meta_title' => 'nullable|string|max:255',
+            'meta_description' => 'nullable|string|max:255',
+            'thumbnail' => 'nullable|string|max:255',
+            'status' => ['nullable', Rule::in(['draft', 'published', 'archived'])],
+            'category' => 'nullable|string|max:100',
+        ]);
+
+        // Find the post by slug
+        $post = Post::where('slug', $slug)->firstOrFail();
+
+        // Update the post with the validated data
+        $post->update($validatedData);
+
+        // If the thumbnail is being updated and there is an existing one, delete it
+        if ($request->has('thumbnail') && $request->thumbnail !== $post->thumbnail && $post->thumbnail) {
+            Storage::disk('public')->delete($post->thumbnail);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Post updated successfully',
+            'data' => $post
+        ], 200);
+    }
 
 
     public function destroy($slug)

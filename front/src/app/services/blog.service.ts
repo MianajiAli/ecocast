@@ -17,6 +17,7 @@ export class BlogService {
   private getHeaders(): HttpHeaders {
     return new HttpHeaders({
       'Accept': 'application/json',
+      'Content-Type': 'application/json',
       'Authorization': `Bearer ${this.token}`
     });
   }
@@ -59,7 +60,7 @@ export class BlogService {
     );
   }
 
-  // Update a post by slug (Supports Image Upload)// Update a post by slug (Send JSON with base64 image)
+  // Update a post by slug (Supports Image Upload)
   updatePost(slug: string, jsonData: any, imageFile?: File): Observable<any> {
     const data = {
       title: jsonData.title,
@@ -73,11 +74,12 @@ export class BlogService {
       thumbnail: jsonData.thumbnail || '', // Use base64 image if available, otherwise fallback to existing thumbnail
     };
 
-    return this.http.post<any>(`${this.apiUrl}${slug}`, data, { headers: this.getHeaders() }).pipe(
+    return this.http.patch<any>(`${this.apiUrl}${slug}`, data, { headers: this.getHeaders() }).pipe(
       map(response => response),
       catchError(error => throwError(() => new Error(error)))
     );
   }
+
 
 
   // Delete a post by slug
