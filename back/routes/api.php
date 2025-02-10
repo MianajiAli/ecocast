@@ -45,7 +45,7 @@ Route::prefix('v1')->group(function () {
     Route::prefix('posts')->group(function () {
         Route::get('/', [PostController::class, 'index']);
         Route::get('/{slug}', [PostController::class, 'show']);
-        Route::patch('/{slug}', [PostController::class, 'update']);
+        Route::put('/{slug}', [PostController::class, 'update']);
         Route::middleware(['auth:api', 'role:manager'])->group(function () {
 
             Route::post('/', [PostController::class, 'store']);

@@ -74,7 +74,7 @@ export class BlogService {
       thumbnail: jsonData.thumbnail || '', // Use base64 image if available, otherwise fallback to existing thumbnail
     };
 
-    return this.http.patch<any>(`${this.apiUrl}${slug}`, data, { headers: this.getHeaders() }).pipe(
+    return this.http.put<any>(`${this.apiUrl}${slug}`, data, { headers: this.getHeaders() }).pipe(
       map(response => response),
       catchError(error => throwError(() => new Error(error)))
     );

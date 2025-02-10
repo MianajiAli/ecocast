@@ -6,7 +6,7 @@
 
         <!-- Blog Thumbnail (Fallback Image) -->
         <div *ngIf="blog.thumbnail; else defaultThumbnail" class="my-6">
-            <img [src]="'/storage/' + blog.thumbnail" alt="Thumbnail" class="w-full h-auto rounded-lg shadow-md">
+            <img [src]="blog.thumbnail" alt="Thumbnail" class="w-full h-auto rounded-lg shadow-md">
         </div>
         <ng-template #defaultThumbnail>
             <!-- <img src="/path/to/default-image.jpg" alt="Default Thumbnail" class="w-full h-auto rounded-lg shadow-md"> -->
