@@ -14,7 +14,7 @@ export class BlogsComponent {
     this.blogService.blogs().subscribe(
       (response) => {
         console.log('Logged in successfully', response);
-        this.blogs = response
+        this.blogs = response.data
       },
       (error) => {
         console.error('Login failed', error);
