@@ -1,0 +1,17 @@
+<div class="max-w-3xl mx-auto p-6">
+    <div *ngIf="blog; else loading" class="bg-white shadow-lg rounded-lg p-6">
+        <a routerLink="/blog" class="inline-block mt-6 text-blue-600 hover:underline">
+            ← Back to Blog
+        </a>
+        <h1 class="text-3xl font-bold text-gray-900 mb-4">{{ blog.title }}</h1>
+        <p class="text-gray-500 text-sm mb-6">Published on {{ blog.created_at | date: 'longDate' }}</p>
+
+        <p class="text-gray-700 leading-relaxed whitespace-pre-line">{{ blog.content }}</p>
+
+
+    </div>
+
+    <ng-template #loading>
+        <div class="text-center text-gray-500">Loading blog post...</div>
+    </ng-template>
+</div>

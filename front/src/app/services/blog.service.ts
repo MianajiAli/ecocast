@@ -29,12 +29,12 @@ export class BlogService {
   }
 
   // Get a single blog post by ID
-  getBlog(id: number): Observable<any> {
+  getBlog(slug: string): Observable<any> {
     const headers = new HttpHeaders({
       'Accept': 'application/json',
       'Content-Type': 'application/json'
     });
-    return this.http.get<any>(`${this.apiUrl}${id}`, { headers }).pipe(
+    return this.http.get<any>(`${this.apiUrl}${slug}`, { headers }).pipe(
       map(response => response),
       catchError(error => {
         console.error('Blog error', error);
