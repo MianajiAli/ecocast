@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { AuthService } from '../auth.service';
+import { AuthService } from '../../services/auth.service';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -12,13 +13,15 @@ export class LoginComponent {
   phone: string = '';
   password: string = '';
 
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService, private router: Router) { }
 
   onLogin(): void {
     this.authService.login(this.phone, this.password).subscribe(
       (response) => {
         console.log('Logged in successfully', response);
         // You can navigate to a protected route here
+        this.router.navigate(['/']);
+
       },
       (error) => {
         console.error('Login failed', error);

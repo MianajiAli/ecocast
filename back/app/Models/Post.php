@@ -4,35 +4,42 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Post extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'title',
-        'body',
-        'user_id', // Author of the post
-        'category_id',
+        'slug',
+        'content',
+        'meta_title',
+        'meta_description',
+        'thumbnail',
+        'status',
+        'category',
+        'tags',
+        'user_id'
+    ];
+
+
+    protected $casts = [
+        'tags' => 'array', // Ensures tags are stored as JSON
     ];
 
     /**
-     * Define the relationship between post and user (author).
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * Get the author of the post.
      */
-    public function author()
+    public function user()
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class);
     }
 
     /**
-     * Define the relationship between post and category.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * Get the comments for the post.
      */
-    public function category()
-    {
-        return $this->belongsTo(Category::class);
-    }
+    // public function comments() {
+    //     return $this->hasMany(Comment::class);
+    // }
 }

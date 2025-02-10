@@ -15,12 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('phone')->unique();
-            $table->string('confirm_code')->nullable();
+            $table->string('verify_code')->nullable();
             $table->timestamp('phone_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
-            // Updated role enum to include 'author' and 'superadmin'
-            $table->enum('role', ['user', 'admin', 'author', 'superadmin'])->default('user');
             $table->timestamps();
         });
 

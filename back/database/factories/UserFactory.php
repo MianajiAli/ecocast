@@ -2,59 +2,43 @@
 
 namespace Database\Factories;
 
-use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
+/**
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
+ */
 class UserFactory extends Factory
 {
-    protected $model = User::class;
+    /**
+     * The current password being used by the factory.
+     */
+    protected static ?string $password;
 
-    public function definition()
+    /**
+     * Define the model's default state.
+     *
+     * @return array<string, mixed>
+     */
+    public function definition(): array
     {
         return [
-            'name' => $this->faker->name,
-            'phone' => $this->faker->unique()->phoneNumber,
-            'confirm_code' => $this->faker->optional()->word,
-            'phone_verified_at' => $this->faker->optional()->dateTime(),
-            'password' => bcrypt('password123'), // Default password
-            'role' => $this->faker->randomElement(['user', 'admin', 'author', 'superadmin']),
+            'name' => fake()->name(),
+            'email' => fake()->unique()->safeEmail(),
+            'email_verified_at' => now(),
+            'password' => static::$password ??= Hash::make('password'),
+            'remember_token' => Str::random(10),
         ];
     }
 
     /**
-     * Indicate that the user is an admin.
-     *
-     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     * Indicate that the model's email address should be unverified.
      */
-    public function admin()
+    public function unverified(): static
     {
-        return $this->state([
-            'role' => 'admin',
-        ]);
-    }
-
-    /**
-     * Indicate that the user is an author.
-     *
-     * @return \Illuminate\Database\Eloquent\Factories\Factory
-     */
-    public function author()
-    {
-        return $this->state([
-            'role' => 'author',
-        ]);
-    }
-
-    /**
-     * Indicate that the user is a superadmin.
-     *
-     * @return \Illuminate\Database\Eloquent\Factories\Factory
-     */
-    public function superadmin()
-    {
-        return $this->state([
-            'role' => 'superadmin',
+        return $this->state(fn (array $attributes) => [
+            'email_verified_at' => null,
         ]);
     }
 }
