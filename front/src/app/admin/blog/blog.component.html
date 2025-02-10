@@ -1,0 +1,51 @@
+<div class="max-w-4xl mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg">
+    <h2 class="text-2xl font-semibold text-gray-800 mb-6">Add a New Blog Post</h2>
+    <form action="/api/posts" method="POST" class="space-y-4">
+        <!-- Title -->
+        <div>
+            <label for="title" class="block text-sm font-medium text-gray-700">Title</label>
+            <input type="text" id="title" name="title"
+                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                required>
+        </div>
+
+        <!-- Slug -->
+        <div>
+            <label for="slug" class="block text-sm font-medium text-gray-700">Slug</label>
+            <input type="text" id="slug" name="slug"
+                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                required>
+        </div>
+
+        <!-- Content -->
+        <div>
+            <label for="content" class="block text-sm font-medium text-gray-700">Content</label>
+            <textarea id="content" name="content" rows="4"
+                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                required></textarea>
+        </div>
+
+        <!-- Meta Title -->
+        <div>
+            <label for="meta_title" class="block text-sm font-medium text-gray-700">Meta Title (Optional)</label>
+            <input type="text" id="meta_title" name="meta_title"
+                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+        </div>
+
+        <!-- Meta Description -->
+        <div>
+            <label for="meta_description" class="block text-sm font-medium text-gray-700">Meta Description
+                (Optional)</label>
+            <input type="text" id="meta_description" name="meta_description"
+                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+        </div>
+
+        <!-- Submit Button -->
+        <div>
+            <button type="submit"
+                class="w-full py-2 px-4 bg-indigo-600 text-white font-semibold rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                Add Post
+            </button>
+        </div>
+    </form>
+</div>
