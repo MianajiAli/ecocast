@@ -25,6 +25,7 @@ Route::prefix('v1')->group(function () {
 
         // Protected Authentication Routes
         Route::middleware('auth:api')->group(function () {
+            Route::get('/check-roles', [AuthController::class, 'checkRole']);
             Route::post('/me', [AuthController::class, 'me']); // Get authenticated user details
             Route::post('/logout', [AuthController::class, 'logout']);
         });

@@ -109,6 +109,21 @@ export class AuthService {
       })
     );
   }
+  getRoles(): Observable<any> {
+    const headers = new HttpHeaders({
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
+    });
+
+    return this.http.get<any>(`${this.apiUrl}/check-roles`, { headers }).pipe(
+      map(response => {
+        // Assuming the roles are in response.roles, adjust if necessary
+        return response.roles; // Returning only the roles
+      })
+    );
+  }
+
 
   // Check if the user is authenticated
   isAuthenticated(): boolean {

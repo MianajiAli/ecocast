@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { AdminAuthGuard } from './auth.guard';
 
 export const routes: Routes = [
 
@@ -12,6 +13,7 @@ export const routes: Routes = [
     },
     {
         path: 'panel',
-        loadChildren: () => import('./admin/admin.routes').then(m => m.routes)
+        loadChildren: () => import('./admin/admin.routes').then(m => m.routes),
+        canActivate: [AdminAuthGuard]
     }
 ];

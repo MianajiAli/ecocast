@@ -41,9 +41,9 @@ class RoleController extends Controller
             'message' => 'Role assigned successfully',
             'user' => $user,
             'isManager' => $user->hasRole('manager'),
-            'isAdmin' => $user->hasRole('manager'),
-            'isManager' => $user->hasRole('manager'),
+            'isAdmin' => $user->hasRole('admin'),
             'isAuthor' => $user->hasRole('author'),
+            'isUser' => $user->hasRole('user'),
 
         ], 200);
     }
