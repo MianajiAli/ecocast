@@ -1,14 +1,17 @@
-<div class="container mx-auto p-6">
-    <h1 class="text-4xl font-bold text-center mb-8">Blog Posts</h1>
+<div class="container mx-auto p-6" dir="rtl">
+    <h1 class="text-4xl font-bold text-center mb-8">پست‌های وبلاگ</h1>
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-        <div *ngFor="let blog of blogs" class="bg-white rounded-lg shadow-lg overflow-hidden">
-            <img [src]="blog.thumbnail" alt="Blog Image" class="w-full h-48 object-cover">
-            <div class="p-4">
-                <h2 class="text-2xl font-semibold text-gray-800">{{ blog.title }}</h2>
-                <p class="text-gray-600 mt-2">{{ blog.excerpt }}</p>
-                <a [routerLink]="['/blog', blog.slug]" class="text-indigo-500 hover:underline mt-4 inline-block">Read
-                    more</a>
-            </div>
-        </div>
+        <ng-container *ngFor="let blog of blogs">
+            <a [routerLink]="['/blog', blog.slug]"
+                class="no-underline hover:no-underline text-indigo-500 mt-4 inline-block">
+                <div class="bg-white/50 rounded-lg shadow-lg overflow-hidden">
+                    <img [src]="blog.thumbnail" alt="Blog Image" class="w-full h-48 object-cover">
+                    <div class="p-4 text-right">
+                        <h2 class="text-2xl font-semibold text-gray-800">{{ blog.title }}</h2>
+                        <p class="text-gray-600 mt-2">{{ blog.excerpt }}</p>
+                    </div>
+                </div>
+            </a>
+        </ng-container>
     </div>
 </div>

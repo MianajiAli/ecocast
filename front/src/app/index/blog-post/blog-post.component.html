@@ -1,7 +1,7 @@
-<div class="max-w-3xl mx-auto p-6">
+<div class="max-w-3xl mx-auto p-6" dir="rtl">
     <div *ngIf="blog; else loading" class="bg-white shadow-lg rounded-lg p-6">
-        <a routerLink="/blog" class="inline-block mt-6 text-blue-600 hover:underline">
-            ← Back to Blog
+        <a routerLink="/blog" class="text-left block mt-6 text-blue-600 hover:underline">
+            ← بازگشت به وبلاگ
         </a>
 
         <!-- Blog Thumbnail (Fallback Image) -->
@@ -12,22 +12,22 @@
             <!-- <img src="/path/to/default-image.jpg" alt="Default Thumbnail" class="w-full h-auto rounded-lg shadow-md"> -->
         </ng-template>
 
-        <h1 class="text-4xl font-extrabold text-gray-900 mb-4">{{ blog.title }}</h1>
+        <h1 class="text-4xl font-extrabold text-gray-900 mb-4 text-right">{{ blog.title }}</h1>
 
         <!-- Author and Date Info -->
-        <div class="flex items-center text-gray-500 text-sm mb-6">
-            <span>By <span class="font-semibold text-gray-700">{{ blog.user.name }}</span></span>
+        <div class="flex flex-row items-center text-gray-500 text-sm mb-6">
+            <span>نویسنده: <span class="font-semibold text-gray-700">{{ blog.user.name }}</span></span>
             <span class="mx-2">|</span>
-            <span>Published on {{ blog.created_at | date: 'longDate' }}</span>
+            <span>منتشر شده در {{ blog.created_at | date: 'longDate' }}</span>
         </div>
 
         <!-- Blog Content -->
-        <p class="text-gray-700 leading-relaxed whitespace-pre-line">{{ blog.content }}</p>
+        <p class="text-gray-700 leading-relaxed whitespace-pre-line text-right">{{ blog.content }}</p>
 
         <!-- Blog Tags (Optional) -->
-        <div *ngIf="blog.tags?.length" class="mt-6">
-            <h3 class="font-semibold text-lg text-gray-800 mb-2">Tags:</h3>
-            <div class="flex flex-wrap gap-2">
+        <div *ngIf="blog.tags?.length" class="mt-6 text-right">
+            <h3 class="font-semibold text-lg text-gray-800 mb-2">برچسب‌ها:</h3>
+            <div class="flex flex-wrap gap-2 justify-end">
                 <span *ngFor="let tag of blog.tags" class="bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-sm">
                     {{ tag }}
                 </span>
@@ -35,13 +35,13 @@
         </div>
 
         <!-- Blog Category (Optional) -->
-        <div *ngIf="blog.category" class="mt-4 text-gray-500">
-            <span class="font-semibold">Category:</span> {{ blog.category }}
+        <div *ngIf="blog.category" class="mt-4 text-gray-500 text-right">
+            <span class="font-semibold">دسته‌بندی:</span> {{ blog.category }}
         </div>
     </div>
 
     <!-- Loading state -->
     <ng-template #loading>
-        <div class="text-center text-gray-500">Loading blog post...</div>
+        <div class="text-center text-gray-500">در حال بارگذاری پست وبلاگ...</div>
     </ng-template>
 </div>
