@@ -8,10 +8,11 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 use Laravel\Passport\HasApiTokens;
+
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasApiTokens,HasFactory, Notifiable,HasRoles;
+    use HasApiTokens, HasFactory, Notifiable, HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -19,9 +20,14 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
+        'username', // Add username
         'name',
         'phone',
         'password',
+        'profile_image', // Add profile image
+        'banner_image', // Add banner image
+        'bio', // Add bio
+        'social_links', // Add social links
     ];
 
     /**
@@ -44,6 +50,7 @@ class User extends Authenticatable
         return [
             'phone_verified_at' => 'datetime',
             'password' => 'hashed',
+            'social_links' => 'array', // Cast social_links to array
         ];
     }
 }

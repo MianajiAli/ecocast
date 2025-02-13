@@ -38,8 +38,8 @@ export class AuthService {
   }
 
   // Register method
-  register(name: string, phone: string, password: string): Observable<any> {
-    const registerData = { name, phone, password };
+  register(name: string, username: string, phone: string, password: string): Observable<any> {
+    const registerData = { name, username, phone, password };
     const headers = new HttpHeaders({
       'Accept': 'application/json',
       'Content-Type': 'application/json'

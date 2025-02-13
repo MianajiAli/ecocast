@@ -13,9 +13,9 @@ import { CommonModule } from '@angular/common';
 export class RegisterComponent {
   formData = {
     name: '',
+    username: '',
     phone: '',
     password: '',
-
   };
 
   constructor(private authService: AuthService, private router: Router) { }
@@ -23,7 +23,7 @@ export class RegisterComponent {
   // This method handles the registration process
   onRegister() {
     // Call the register method from AuthService
-    this.authService.register(this.formData.name, this.formData.phone, this.formData.password)
+    this.authService.register(this.formData.name, this.formData.username, this.formData.phone, this.formData.password)
       .subscribe(
         response => {
           // Check the response

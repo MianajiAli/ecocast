@@ -18,9 +18,14 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
+            'username' => 'required|string|max:255|unique:users,username', // Unique username
             'name' => 'required|string|max:255',
             'phone' => 'required|string|unique:users,phone',
             'password' => 'required|string|min:6',
+            'profile_image' => 'nullable|url', // Optional profile image URL
+            'banner_image' => 'nullable|url', // Optional banner image URL
+            'bio' => 'nullable|string', // Optional bio
+            'social_links' => 'nullable|array', // Optional social links (array)
         ]);
 
         if ($validator->fails()) {
@@ -28,9 +33,14 @@ class AuthController extends Controller
         }
 
         $user = User::create([
+            'username' => $request->username,
             'name' => $request->name,
             'phone' => $request->phone,
             'password' => bcrypt($request->password),
+            'profile_image' => $request->profile_image,
+            'banner_image' => $request->banner_image,
+            'bio' => $request->bio,
+            'social_links' => $request->social_links,
         ]);
 
         // Generate access token
@@ -90,6 +100,10 @@ class AuthController extends Controller
     {
         return response()->json($request->user());
     }
+
+    /**
+     * Check user roles
+     */
     public function checkRole(Request $request)
     {
         $user = auth()->user();
@@ -99,10 +113,6 @@ class AuthController extends Controller
         ], 200);
     }
 
-
-    /**
-     * Refresh access token using refresh token
-     */
     /**
      * Refresh access token using refresh token (One-time use)
      */
@@ -142,11 +152,9 @@ class AuthController extends Controller
         ]);
     }
 
-
     /**
      * Logout user (Revoke Token & Refresh Token)
      */
-
     public function logout(Request $request)
     {
         $user = $request->user();
