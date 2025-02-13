@@ -6,8 +6,10 @@
     font-family: 'UnifiedFont';
     src: url('./app/assets/fonts/Kahroba-VF[wght,wdth,CNTR].woff2') format('woff2');
     font-weight: 100 900;
-    font-stretch: 25% 100%;
+    font-stretch: 25% 125%;
     font-style: normal;
+    font-variation-settings: "CNTR" 25;
+    letter-spacing: 0em;
     unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
     /* Persian & Arabic */
 }
@@ -25,4 +27,11 @@
 /* Apply the unified font */
 body {
     font-family: 'UnifiedFont', sans-serif;
+
+}
+
+h1 {
+    font-weight: 650;
+    font-stretch: 100%;
+    line-height: 100px;
 }
