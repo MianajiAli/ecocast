@@ -1,10 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
 import { BlogService } from '../../services/blog.service';
+import { CardComponent } from '../card/card.component';
 @Component({
   selector: 'app-blogs',
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, CardComponent],
   templateUrl: './blogs.component.html',
   styleUrl: './blogs.component.css'
 })
