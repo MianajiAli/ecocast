@@ -7,7 +7,6 @@ use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
-use App\Models\User;
 
 class PostController extends Controller
 {
@@ -119,35 +118,6 @@ class PostController extends Controller
             'success' => true,
             'message' => 'Post restored successfully',
             'data' => $post
-        ], 200);
-    }
-
-    public function getAuthorByUsername($username)
-    {
-        // Find the user by username
-        $user = User::where('username', $username)->first();
-        $post = Post::where('user_id', $user->id)->latest()->get();
-        // If user not found, return a 404 response
-        if (!$user) {
-            return response()->json([
-                'message' => 'Author not found',
-            ], 404);
-        }
-
-        // Check if the user has the 'author' role
-        if (!$user->hasRole('author')) {
-            return response()->json([
-                'message' => 'User is not an author',
-            ], 403); // Use 403 Forbidden for unauthorized access
-        }
-
-
-
-        // Return the author's information including posts and roles
-        return response()->json([
-            'message' => 'Author found',
-            'user' => $user,
-            'post' => $post
         ], 200);
     }
 }

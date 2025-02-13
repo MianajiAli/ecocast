@@ -14,13 +14,16 @@
     </nav>
 </header>
 
-
 <main>
     <!-- hero -->
     <section class="w-full min-h-[300px] h-[65vh] bg-amber-50 flex flex-col items-center justify-center text-center p-6"
         dir="rtl">
-        <h1 class="text-3xl md:text-6xl font-bold text-gray-900">برکه : پلتفرم انتشار پادکست</h1>
-        <h2 class="text-xl md:text-2xl text-gray-700 mt-2">پلتفرم حرفه‌ای انتشار پادکست و به‌اشتراک‌گذاری دانش</h2>
+        <h1 class="text-3xl md:text-6xl font-bold text-gray-900">
+            برکه : پلتفرم انتشار پادکست
+        </h1>
+        <h2 class="text-xl md:text-2xl text-gray-700 mt-2">
+            پلتفرم حرفه‌ای انتشار پادکست و به‌اشتراک‌گذاری دانش
+        </h2>
 
         <p class="text-gray-600 mt-4 max-w-md">
             <!-- Description can go here -->
@@ -37,77 +40,27 @@
     </section>
 
     <section class="w-full flex flex-col bg-amber-50 py-8">
-
         <div id="podcasts" class="w-full pb-32 flex flex-col items-center justify-start p-6 gap-5" dir="rtl">
             <h2 class="text-3xl font-bold text-gray-900 mb-6">پادکست ها</h2>
-            <div class="flex flex-wrap justify-center gap-5"> <!-- Added for responsive layout -->
-                <div class="w-52 h-72 p-3 rounded-md flex flex-col justify-between gap-3 ">
-                    <!-- Added shadow and background -->
-                    <div class="w-full aspect-square bg-yellow-800/25 rounded-md">
-                        <!-- Podcast Image here -->
-                    </div>
-                    <div class="w-full h-full rounded-md flex flex-col">
-                        <div>
-                            <h3 class="text-xl font-semibold text-gray-800">اکوکست</h3>
-                            <p class="text-sm text-gray-600"> 1250دنبال کننده</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Repeat the above podcast card for more podcasts -->
-                <div class="w-52 h-72 p-3 rounded-md flex flex-col justify-between gap-3 ">
-                    <!-- Added shadow and background -->
-                    <div class="w-full aspect-square bg-yellow-800/25 rounded-md">
-                        <!-- Podcast Image here -->
-                    </div>
-                    <div class="w-full h-full rounded-md flex flex-col">
-                        <div>
-                            <h3 class="text-xl font-semibold text-gray-800">اسم پادکست</h3>
-                            <p class="text-sm text-gray-600"> 900دنبال کننده</p>
-                        </div>
-                    </div>
-                </div>
+            <div class="flex flex-wrap justify-center gap-5">
+                <!-- Use app-card here -->
+                <app-card *ngFor="let podcast of podcasts" [podcastName]="podcast.name"
+                    [followerCount]="podcast.followers" [imageUrl]="podcast.imageUrl"></app-card>
             </div>
         </div>
 
         <div id="episodes" class="w-full pb-32 flex flex-col items-center justify-start p-6 gap-5" dir="rtl">
             <h2 class="text-3xl font-bold text-gray-900 mb-6">آخرین اپیزود ها</h2>
-            <div class="flex flex-wrap justify-center gap-5"> <!-- Added for responsive layout -->
-                <div class="w-52 h-72 p-3 rounded-md flex flex-col justify-between gap-3 ">
-                    <!-- Added shadow and background -->
-                    <div class="w-full aspect-square bg-yellow-800/25 rounded-md">
-                        <!-- Podcast Image here -->
-                    </div>
-                    <div class="w-full h-full rounded-md flex flex-col">
-                        <div>
-                            <h3 class="text-xl font-semibold text-gray-800">اکوکست</h3>
-                            <p class="text-sm text-gray-600"> 1250دنبال کننده</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Repeat the above podcast card for more podcasts -->
-                <div class="w-52 h-72 p-3 rounded-md flex flex-col justify-between gap-3 ">
-                    <!-- Added shadow and background -->
-                    <div class="w-full aspect-square bg-yellow-800/25 rounded-md">
-                        <!-- Podcast Image here -->
-                    </div>
-                    <div class="w-full h-full rounded-md flex flex-col">
-                        <div>
-                            <h3 class="text-xl font-semibold text-gray-800">اسم پادکست</h3>
-                            <p class="text-sm text-gray-600"> 900دنبال کننده</p>
-                        </div>
-                    </div>
-                </div>
+            <div class="flex flex-wrap justify-center gap-5">
+                <!-- Use app-card here -->
+                <app-card *ngFor="let episode of episodes" [podcastName]="episode.name"
+                    [followerCount]="episode.followers" [imageUrl]="episode.imageUrl"></app-card>
             </div>
         </div>
-
-
 
         <app-blogs />
     </section>
 </main>
-
 
 <footer class="w-full bg-stone-700 text-white py-8" dir="rtl">
     <div class="container mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-6 text-center md:text-right">
@@ -122,9 +75,17 @@
             <h3 class="text-lg font-semibold">لینک‌های سریع</h3>
             <ul class="mt-2 space-y-2">
                 <li><a href="/" class="hover:text-gray-400 transition-colors">خانه</a></li>
-                <li><a href="/about" class="hover:text-gray-400 transition-colors">درباره ما</a></li>
-                <li><a href="/services" class="hover:text-gray-400 transition-colors">خدمات</a></li>
-                <li><a href="#contact" class="hover:text-gray-400 transition-colors">تماس با ما</a></li>
+                <li>
+                    <a href="/about" class="hover:text-gray-400 transition-colors">درباره
+                        ما</a>
+                </li>
+                <li>
+                    <a href="/services" class="hover:text-gray-400 transition-colors">خدمات</a>
+                </li>
+                <li>
+                    <a href="#contact" class="hover:text-gray-400 transition-colors">تماس
+                        با ما</a>
+                </li>
             </ul>
         </div>
 
@@ -139,7 +100,6 @@
             </div>
         </div>
     </div>
-
 
     <!-- Copyright -->
     <div class="text-center text-gray-400 text-sm mt-6">

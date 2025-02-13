@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\AuthorController;
 use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\PostController;
 
@@ -16,7 +17,8 @@ Route::prefix('v1')->group(function () {
     // Role Management Routes
     Route::get('/create-roles', [RoleController::class, 'createRoles']);
     Route::get('/assign-to-user', [RoleController::class, 'assignRoleToUser']);
-    Route::get('/author/{username}', [PostController::class, 'getAuthorByUsername']);
+    Route::get('/author/{username}', [AuthorController::class, 'getAuthorByUsername']);
+    Route::get('/getAuthors', [AuthorController::class, 'getAuthors']);
     // Authentication Routes
     Route::prefix('auth')->group(function () {
         Route::post('/login', [AuthController::class, 'login']);

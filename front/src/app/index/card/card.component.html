@@ -1,0 +1,17 @@
+<div class="w-52 h-72 p-3 rounded-md flex flex-col justify-between gap-3">
+    <!-- Added shadow and background -->
+    <div class="w-full aspect-square rounded-md overflow-hidden">
+        <!-- Podcast Image here -->
+        <img *ngIf="!imageLoadError && imageUrl" [src]="imageUrl" alt="{{podcastName}} Podcast"
+            class="w-full h-full object-cover" (error)="handleImageError()">
+        <div *ngIf="imageLoadError || !imageUrl" class="w-full h-full bg-gray-200 flex items-center justify-center">
+            <span class="text-gray-500">No Image</span>
+        </div>
+    </div>
+    <div class="w-full h-full rounded-md flex flex-col">
+        <div>
+            <h3 class="text-xl font-semibold text-gray-800">{{ podcastName }}</h3>
+            <p class="text-sm text-gray-600">{{ followerCount }} دنبال کننده</p>
+        </div>
+    </div>
+</div>
