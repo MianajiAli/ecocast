@@ -16,7 +16,7 @@ Route::prefix('v1')->group(function () {
     // Role Management Routes
     Route::get('/create-roles', [RoleController::class, 'createRoles']);
     Route::get('/assign-to-user', [RoleController::class, 'assignRoleToUser']);
-
+    Route::get('/author/{username}', [AuthController::class, 'getAuthorByUsername']);
     // Authentication Routes
     Route::prefix('auth')->group(function () {
         Route::post('/login', [AuthController::class, 'login']);

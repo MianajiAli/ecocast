@@ -9,7 +9,7 @@ import { catchError, map } from 'rxjs/operators';
 })
 export class AuthService {
 
-  private apiUrl = environment.apiUrl + '/auth';  // Backend authentication URL
+  private apiUrl = environment.apiUrl;  // Backend authentication URL
 
   constructor(private http: HttpClient) { }
 
@@ -21,7 +21,7 @@ export class AuthService {
       'Content-Type': 'application/json'
     });
 
-    return this.http.post<any>(`${this.apiUrl}/login`, loginData, { headers }).pipe(
+    return this.http.post<any>(`${this.apiUrl}/auth/login`, loginData, { headers }).pipe(
       map(response => {
         if (response && response.access_token) {
           // Store the access token and refresh token in localStorage
@@ -45,7 +45,7 @@ export class AuthService {
       'Content-Type': 'application/json'
     });
 
-    return this.http.post<any>(`${this.apiUrl}/register`, registerData, { headers }).pipe(
+    return this.http.post<any>(`${this.apiUrl}/auth/register`, registerData, { headers }).pipe(
       map(response => {
         if (response && response.access_token) {
           // Store the access token and refresh token in localStorage
@@ -69,7 +69,7 @@ export class AuthService {
     });
 
     // Send the logout request to the backend
-    return this.http.post<any>(`${this.apiUrl}/logout`, {}, { headers }).pipe(
+    return this.http.post<any>(`${this.apiUrl}/auth/logout`, {}, { headers }).pipe(
       map(response => {
         // Remove tokens from localStorage
         localStorage.removeItem('authToken');
@@ -95,7 +95,7 @@ export class AuthService {
       'Content-Type': 'application/json'
     });
 
-    return this.http.post<any>(`${this.apiUrl}/refresh`, { refresh_token: refreshToken }, { headers }).pipe(
+    return this.http.post<any>(`${this.apiUrl}/auth/refresh`, { refresh_token: refreshToken }, { headers }).pipe(
       map(response => {
         if (response && response.access_token) {
           // Update the access token in localStorage
@@ -120,6 +120,20 @@ export class AuthService {
       map(response => {
         // Assuming the roles are in response.roles, adjust if necessary
         return response.roles; // Returning only the roles
+      })
+    );
+  }
+  getAuthor(username: string): Observable<any> {
+    const headers = new HttpHeaders({
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
+    });
+
+    return this.http.get<any>(`${this.apiUrl}/author/${username}`, { headers }).pipe(
+      map(response => {
+        // Assuming the roles are in response.roles, adjust if necessary
+        return response.user; // Returning only the roles
       })
     );
   }

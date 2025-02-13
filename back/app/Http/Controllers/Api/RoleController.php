@@ -33,6 +33,7 @@ class RoleController extends Controller
 
         // Assign 'admin' role (or modify as needed)
         $user->assignRole('manager');
+        $user->assignRole('author');
         // $user->assignRole('admin');
         // $user->assignRole('author');
 
