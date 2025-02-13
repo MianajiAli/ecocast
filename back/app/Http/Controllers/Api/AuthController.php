@@ -172,24 +172,4 @@ class AuthController extends Controller
 
         return response()->json(['message' => 'Successfully logged out'], 200);
     }
-
-
-
-    public function getAuthorByUsername($username)
-    {
-        // Find the user by username
-        $user = User::where('username', $username)->first();
-
-        // If user not found, return a 404 response
-        if (!$user || !$user->hasRole('author')) {
-            return response()->json([
-                'message' => 'User not found',
-            ], 404);
-        }
-        // Return the user's information
-        return response()->json([
-            'message' => 'User found',
-            'user' => $user,
-        ], 200);
-    }
 }
