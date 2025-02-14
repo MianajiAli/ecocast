@@ -3,6 +3,7 @@ import { AuthorService } from '../../services/author.service';
 import { BlogsComponent } from '../blogs/blogs.component';
 import { CardComponent } from '../card/card.component';
 import { CommonModule } from '@angular/common';
+import { BlogService } from '../../services/blog.service';
 
 
 @Component({
@@ -12,8 +13,14 @@ import { CommonModule } from '@angular/common';
   styleUrl: './home.component.css'
 })
 export class HomeComponent {
-  constructor(private authorService: AuthorService) { }
+  constructor(private authorService: AuthorService, private blogService: BlogService) { }
   ngOnInit(): void {
+    this.getAuthors()
+    this.getPosts()
+  }
+  podcasts!: any[]
+  episodes!: any[]
+  getAuthors() {
     this.authorService.getAuthors().subscribe(
       (response) => {
         this.podcasts = response.data
@@ -23,14 +30,18 @@ export class HomeComponent {
       }
     )
   }
-  podcasts !: any[]
+  getPosts() {
+    this.blogService.getPosts().subscribe(
+      (response) => {
+        console.log('Logged in successfully', response);
+        this.episodes = response.data
+      },
+      (error) => {
+        console.error('Login failed', error);
+      }
+    )
+  }
 
 
 
-  episodes = [
-    { name: 'اکوکست', followers: 1250, imageUrl: 'url_to_your_image1.jpg' },
-    { name: 'اسم پادکست', followers: 900, imageUrl: 'url_to_your_image2.jpg' },
-    { name: 'پادکست جدید', followers: 500, imageUrl: 'url_to_your_image3.jpg' },
-    // Add more podcast data as needed
-  ];
 }
