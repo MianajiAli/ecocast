@@ -133,7 +133,7 @@ export class AuthService {
     return this.http.get<any>(`${this.apiUrl}/author/${username}`, { headers }).pipe(
       map(response => {
         // Assuming the roles are in response.roles, adjust if necessary
-        return response.user; // Returning only the roles
+        return response; // Returning only the roles
       })
     );
   }

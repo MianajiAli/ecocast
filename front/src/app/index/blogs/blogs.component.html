@@ -1,9 +1,10 @@
-<div id="episodes" class="w-full pb-32 flex flex-col items-center justify-start p-6 gap-5" dir="rtl">
+<div id="episodes" class="w-full pb-32 flex flex-col items-center justify-start p-6 gap-5" dir="">
     <h1 class="text-4xl font-bold text-center mb-8">پست‌های وبلاگ</h1>
     <div class="flex flex-wrap justify-center gap-5">
         <!-- Use app-card here -->
         <ng-container *ngFor="let blog of blogs">
-            <app-card [podcastName]="blog.title" [followerCount]="blog.views" [imageUrl]="blog.thumbnail" />
+            <app-card [title]="blog.title" [count]="blog.views" [imageUrl]="blog.thumbnail"
+                [link]="'blog/'+blog.slug" />
         </ng-container>
     </div>
 </div>

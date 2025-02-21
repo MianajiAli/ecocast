@@ -9,9 +9,11 @@ import { Component, Input } from '@angular/core';
 })
 export class CardComponent {
 
-  @Input() podcastName: string = ''; // Default value to avoid initial undefined.
-  @Input() followerCount: number = 0;
+  @Input() title: string = ''; // Default value to avoid initial undefined.
+  @Input() count: number = 10;
   @Input() imageUrl: string = ''; // Optional image URL
+  @Input() link: string = ''; // Default value to avoid initial undefined.
+  @Input() description = 'lorem20 ksamdklawiosd sdklajd dasdklazs as l;dja sakldk;as'// Default value to avoid initial undefined.
 
   // Optional: You might want to handle image loading errors gracefully
   imageLoadError: boolean = false;
